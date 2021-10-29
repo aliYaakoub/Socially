@@ -2,7 +2,7 @@ import React, { useState, useEffect }from 'react'
 import axios from 'axios'
 import Post from './Post';
 
-const Posts = ({username, userId, notifySuccess, notifyError}) => {
+const Posts = ({userId, notifySuccess, notifyError}) => {
 
     const [posts, setPosts] = useState([]);
 

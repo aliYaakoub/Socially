@@ -36,6 +36,10 @@ function App() {
           <Route path='/profile'>
             <Profile
               username={username}
+              userId={userId}
+              notifySuccess={notifySuccess}
+              notifyError={notifyError}
+              notifyInfo={notifyInfo}
             />
           </Route>
           <Redirect from='/' to='/posts' />

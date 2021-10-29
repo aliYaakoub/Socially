@@ -19,7 +19,19 @@
 .posts{
   max-width: 700px;
 }
-
+.textarea{
+  box-shadow: inset 0px 0px 5px  black;
+  outline: 0;
+}
+.btn-active{
+  transition: transform 0.2s;
+}
+.btn-active:active{
+  transform: scale(0.95);
+}
+.btn-active:hover{
+  transform: scale(1.02);
+}
 
 
 .container {
