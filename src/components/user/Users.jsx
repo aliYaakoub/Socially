@@ -18,7 +18,10 @@ const Users = ({setUserId, setUsername, setLoggedIn, notifyError, notifySuccess}
                         setUsername={setUsername}
                     />
                     :
-                    <Register notifyError={notifyError} setPage={(msg)=>setPage(msg)} />
+                    <Register 
+                        notifyError={notifyError} 
+                        setPage={(msg)=>setPage(msg)} 
+                    />
                 }
         </div>
     )

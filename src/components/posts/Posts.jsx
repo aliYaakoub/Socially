@@ -15,8 +15,7 @@ const Posts = ({username, userId, notifySuccess, notifyError}) => {
     },[])
 
     return (
-        <div className="text-black posts flex flex-col mx-auto">
-            <h1 className="text-center py-16 text-3xl"> username : {username}</h1>
+        <div className="text-black posts flex flex-col mx-auto mt-10">
             {posts.map(post => (
                 <Post 
                     userId={userId}

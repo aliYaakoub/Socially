@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import emptyHeart from '../../img/empty-heart.png';
-import fullHeart from '../../img/full-heart.png';
+import emptyHeart from '../../img/empty-h.png';
+import fullHeart from '../../img/full-h.png';
 
 const Post = ({data, userId, notifyError, notifySuccess}) => {
 
@@ -12,14 +12,12 @@ const Post = ({data, userId, notifyError, notifySuccess}) => {
         
         await axios.patch(`${process.env.REACT_APP_API}/posts/onlike?liked=${liked}&postid=${data._id}&userid=${userId}`);
         setLiked(!liked);
-        notifySuccess('liked');
     }
 
     useEffect(()=>{
         const fetchLikes = async () => {
             const results = await axios.get(`${process.env.REACT_APP_API}/posts?postid=${data._id}`)
             setLikes(results.data[0].likes)
-            console.log(results.data[0])
             if(results.data[0].userWhoLikedThis.find(item => item === userId)){
                 setLiked(true);
             }
@@ -28,12 +26,12 @@ const Post = ({data, userId, notifyError, notifySuccess}) => {
     },[liked,data,userId]);
 
     return (
-        <div className="border border-black post my-5 rounded-xl flex flex-col overflow-hidden">
-            <div className='p-5'>
-                <h1 className="text-3xl pb-5">{data.username}</h1>
+        <div className="relative post my-5 rounded-xl flex flex-col  overflow-hidden shadow">
+            <div className='p-5 mr-28'>
+                <h1 className="text-3xl pb-5 text-blue-400">{data.username}</h1>
                 <p className="text-xl">{data.content}</p>
             </div>
-            <div className="w-full border border-black justify-self-end px-5">
+            <div className="absolute h-full right-0 w-16 sm:w-24 flex flex-col justify-center items-center mx-5 border-l-2 border-blue-300">
                 <div className="flex flex-row items-center">
                     <img src={liked ? fullHeart : emptyHeart} alt="" onClick={()=>onLiked()} className="cursor-pointer"/>
                     <p className="text-xl pl-2" >{likes}</p>
