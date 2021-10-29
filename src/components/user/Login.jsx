@@ -11,10 +11,9 @@ const Login = ({setUserId, setUsername, setLoggedIn, notifyError, notifySuccess,
         e.preventDefault();
         try{
             const results = await axios(`${process.env.REACT_APP_API}/users/login?email=${email}&password=${password}`);
-            console.log(results);
             if(results.data.message === 'welcome'){
                 setLoggedIn(true);
-                setUserId(`${results.data.userId}`);
+                setUserId(results.data.userId);
                 setUsername(results.data.username);
                 notifySuccess('welcome')
             }

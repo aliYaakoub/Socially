@@ -10,7 +10,7 @@ const Post = ({data, userId, notifyError, notifySuccess}) => {
 
     async function onLiked(){
         
-        await axios.patch(`${process.env.REACT_APP_API}/posts/onlike?liked=${liked}&postid=${data._id}`)
+        await axios.patch(`${process.env.REACT_APP_API}/posts/onlike?liked=${liked}&postid=${data._id}&userid=${userId}`);
         setLiked(!liked);
         notifySuccess('liked');
     }
@@ -18,19 +18,14 @@ const Post = ({data, userId, notifyError, notifySuccess}) => {
     useEffect(()=>{
         const fetchLikes = async () => {
             const results = await axios.get(`${process.env.REACT_APP_API}/posts?postid=${data._id}`)
-            console.log(results.data.post.likes);
-            setLikes(results.data.post.likes)
-            
+            setLikes(results.data[0].likes)
+            console.log(results.data[0])
+            if(results.data[0].userWhoLikedThis.find(item => item === userId)){
+                setLiked(true);
+            }
         }
         fetchLikes();
-    },[liked,data])
-
-    // useEffect(()=>{
-    //     const fetchLikes = async () => {
-    //         const results = await axios.get(`${process.env.REACT_APP_API}/posts?postid=${data._id}`)
-    //     }
-    //     fetchLikes();
-    // },[]);
+    },[liked,data,userId]);
 
     return (
         <div className="border border-black post my-5 rounded-xl flex flex-col overflow-hidden">
