@@ -12,18 +12,18 @@ const Login = ({setUserId, setUsername, setLoggedIn, notifyError, notifySuccess,
         try{
             const results = await axios(`${process.env.REACT_APP_API}/users/login?email=${email}&password=${password}`);
             if(results.data.message === 'welcome'){
-                setLoggedIn(true);
                 setUserId(results.data.userId);
                 setUsername(results.data.username);
                 notifySuccess('welcome')
+                setLoggedIn(true);
             }
             else{
-                notifyError('error in the server')
+                notifyError(results.data.message)
             }
         }
         catch(err){
             setPassword('')
-            notifyError('incorrect email or password');
+            notifyError('error in the server');
             console.log(err);
         }
     }

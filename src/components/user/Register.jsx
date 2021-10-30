@@ -14,14 +14,14 @@ const Register = (props) => {
         if(name.length < 5){
             return props.notifyError('name must be at least 5');
         }
-        else if(name.length > 50)      {
-            return props.notifyError('name must be less than 50 characters');
+        else if(name.length > 20)      {
+            return props.notifyError('name is too large');
         }
         else if(username.length < 5)      {
             return props.notifyError('username must be at least 5');
         }
-        else if(username.length > 50)      {
-            return props.notifyError('username must be less than 50 characters');
+        else if(username.length > 15)      {
+            return props.notifyError('username is too large');
         }
         else if(password.length < 5)      {
             return props.notifyError('password must be at least 5');
@@ -32,6 +32,7 @@ const Register = (props) => {
         const results = await axios.post(`${process.env.REACT_APP_API}/users/register?name=${name}&username=${username}&email=${email}&password=${password}`);
         // console.log(results);
         if(results.data.message === 'success'){
+            props.notifySuccess('registered successfully');
             props.setPage('login');
         }
         else{

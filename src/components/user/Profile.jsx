@@ -15,7 +15,7 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
             setPosts(results.data);
         }
         fetch();
-    },[username,posts]);
+    },[username, posts]);
 
     useEffect(()=>{
         const fetch = async () => {
@@ -51,9 +51,8 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
 
     return (
         <div className='min-h-screen bg-gray-400 '>
-            <Link to='/' className='fixed left-5 top-5 text-white text-2xl transition-transform transform hover:scale-110'>&#8920; See All Posts</Link>
+            <Link to='/' className='fixed left-5 top-5 cursor-pointer z-50 text-white text-2xl transition-transform transform hover:scale-110'>&#8920; See All Posts</Link>
             
-
             <div className="relative flex items-center justify-center h-screen flex-col">
                 <div className='flex flex-row m-10 text-3xl items-center bg-white overflow-hidden rounded-xl shadow'>
                     <div className="w-20">

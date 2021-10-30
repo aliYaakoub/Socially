@@ -20,6 +20,7 @@ const Users = ({setUserId, setUsername, setLoggedIn, notifyError, notifySuccess}
                     :
                     <Register 
                         notifyError={notifyError} 
+                        notifySuccess={notifySuccess}
                         setPage={(msg)=>setPage(msg)} 
                     />
                 }

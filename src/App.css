@@ -9,6 +9,9 @@
    background-color: rgb(11, 179, 170);
    background-image: linear-gradient(90deg, rgb(11, 179, 170), #102040);;
 }
+html{
+  scroll-behavior: smooth;
+}
 .shadow{
   box-shadow: 0px 0px 10px black;
 }
@@ -27,10 +30,23 @@
   transition: transform 0.2s;
 }
 .btn-active:active{
-  transform: scale(0.95);
+  transform: scale(0.9);
 }
 .btn-active:hover{
   transform: scale(1.02);
+}
+.animation{
+  animation: jump alternate infinite 0.5s;
+  animation-timing-function: ease-in-out;
+  transform: translateY(0px) rotate(90deg);
+}
+@keyframes jump{
+  from{
+    transform: translateY(0px) rotate(90deg);
+  }
+  to{
+    transform: translateY(10px) rotate(90deg);
+  }
 }
 
 
