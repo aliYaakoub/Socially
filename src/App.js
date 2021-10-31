@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Main from './components/Main'
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Profile from './components/user/Profile';
+import SelectedProfile from './components/SelectedProfile';
 
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
-
+ 
   return (
     <div className="w-full">
       <ToastContainer />
@@ -42,6 +43,12 @@ function App() {
               notifyInfo={notifyInfo}
             />
           </Route>
+          <Route 
+            path='/selecteduser/:username'   
+            render={(props) => (
+              <SelectedProfile {...props} notifySuccess={notifySuccess} notifyError={notifyError} notifyInfo={notifyInfo} />
+            )} 
+          />
           <Redirect from='/' to='/posts' />
         </Switch>
         :

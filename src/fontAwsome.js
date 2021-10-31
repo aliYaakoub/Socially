@@ -5,10 +5,11 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 // import your icons
 // import { faMoneyBill } from '@fortawesome/pro-solid-svg-icons';
 // import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { faPlusSquare } from '@fortawesome/free-regular-svg-icons';
+import { faPlusSquare, faComment } from '@fortawesome/free-regular-svg-icons';
 
 library.add(
     // faHeart2,
     faPlusSquare,
+    faComment
   // more icons go here
 );

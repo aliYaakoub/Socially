@@ -4,7 +4,7 @@ import Post from './Post';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../fontAwsome'
 
-const Posts = ({userId, notifySuccess, notifyError}) => {
+const Posts = ({username, userId, notifySuccess, notifyError}) => {
 
     const [posts, setPosts] = useState([]);
     const [limit, setLimit] = useState(10);
@@ -16,26 +16,30 @@ const Posts = ({userId, notifySuccess, notifyError}) => {
             try{
                 const results = await axios(`${process.env.REACT_APP_API}/posts?page=1&limit=${limit}`)
                 setPosts(results.data.filteredPosts);
-                setMax(results.data.max)
-                console.log(results);
+                setMax(results.data.max);
             }
             catch(err){
                 console.error(err);
             }
         }
         fetch();
-    },[limit])
+    })
 
     return (
         <div className="text-black posts flex flex-col mx-auto mt-10 mb-10">
-            {posts.map(post => (
-                <Post 
-                    userId={userId}
-                    data={post} key={post._id} 
-                    notifySuccess={(msg)=>notifySuccess(msg)}  
-                    notifyError={(msg)=>notifyError(msg)}
-                />
-            ))}
+            {posts.length === 0 ? 
+                <h1 className='text-center text-2xl pt-20'>no posts to show</h1>
+                :
+                posts.map(post => (
+                    <Post 
+                        userId={userId}
+                        username={username}
+                        data={post} key={post._id} 
+                        notifySuccess={(msg)=>notifySuccess(msg)}  
+                        notifyError={(msg)=>notifyError(msg)}
+                    />
+                ))
+            }
             {posts.length === max ? 
                 null
             :

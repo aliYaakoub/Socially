@@ -39,8 +39,8 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
         }
         try{
             await axios.post(`${process.env.REACT_APP_API}/posts`,data);
-            notifySuccess('your post was uploaded successfully',)
             setPostContent('')
+            notifySuccess('your post was uploaded successfully',)
         }
         catch(err){
             setPostContent('')
@@ -87,6 +87,7 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
                             <Post
                                 poster={true}
                                 userId={userId}
+                                username={username}
                                 data={post} key={post._id}
                                 notifySuccess={(msg)=>notifySuccess(msg)}
                                 notifyError={(msg)=>notifyError(msg)}
