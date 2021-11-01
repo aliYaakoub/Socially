@@ -7,7 +7,7 @@ import Comment from '../common/Comment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../fontAwsome';
 
-const Post = ({username, data, userId, notifyError, notifySuccess, poster=false}) => {
+const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, poster=false}) => {
 
     const [liked, setLiked] = useState(false);
     const [likes, setLikes] = useState(data.likes);
@@ -208,7 +208,7 @@ const Post = ({username, data, userId, notifyError, notifySuccess, poster=false}
                     </button>
                 </div>
             </div>
-            {poster ? 
+            {poster || isAdmin ? 
                 <button 
                     onClick={()=>deletePost()}
                     className={`text-red-600 z-10 ${deleteBtnBg} w-32 rounded-b-xl pb-2 mx-auto hover:scale-105 transition-transform transform -translate-y-3`}

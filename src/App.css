@@ -49,6 +49,15 @@ html{
   }
 }
 
+.usersTable th, .usersTable td , .usersTable tr{
+  border: 1px black solid;
+  padding: 10px;
+}
+.usersTable{
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
 
 .container {
   background-color: rgba(0, 0, 0, 0.4);

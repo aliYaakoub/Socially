@@ -4,7 +4,7 @@ import Post from './Post';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../fontAwsome'
 
-const Posts = ({username, userId, notifySuccess, notifyError}) => {
+const Posts = ({isAdmin, username, userId, notifySuccess, notifyError}) => {
 
     const [posts, setPosts] = useState([]);
     const [limit, setLimit] = useState(10);
@@ -37,15 +37,20 @@ const Posts = ({username, userId, notifySuccess, notifyError}) => {
             {posts.length === 0 ? 
                 <h1 className='text-center text-2xl pt-20'>no posts to show</h1>
                 :
-                posts.map(post => (
-                    <Post 
-                        userId={userId}
-                        username={username}
-                        data={post} key={post._id} 
-                        notifySuccess={(msg)=>notifySuccess(msg)}  
-                        notifyError={(msg)=>notifyError(msg)}
-                    />
-                ))
+                <div>
+                    <h1 className='text-center text-2xl'>users posts</h1>
+                    {posts.map(post => (
+                        <Post
+                            data={post}
+                            key={post._id}
+                            userId={userId}
+                            isAdmin={isAdmin}
+                            username={username}
+                            notifyError={(msg)=>notifyError(msg)}
+                            notifySuccess={(msg)=>notifySuccess(msg)}
+                        />
+                    ))}
+                </div>
             }
             {posts.length === max ? 
                 null

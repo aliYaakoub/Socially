@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Login from './Login';
 import Register from './Register';
 
-const Users = ({setUserId, setUsername, setLoggedIn, notifyError, notifySuccess}) => {
+const Users = ({setUserId, setUsername, setIsAdmin, setLoggedIn, notifyError, notifySuccess}) => {
 
     const [page, setPage] = useState('login');
 
@@ -16,6 +16,7 @@ const Users = ({setUserId, setUsername, setLoggedIn, notifyError, notifySuccess}
                         setPage={(msg)=>setPage(msg)}
                         setUserId={setUserId}
                         setUsername={setUsername}
+                        setIsAdmin={setIsAdmin}
                     />
                     :
                     <Register 

@@ -8,45 +8,59 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
     const [posts, setPosts] = useState([]);
     const [postContent, setPostContent] = useState('');
     const [avatar, setAvatar] = useState('');
+    const [isCancelled, setIsCancelled] = useState(true);
 
     useEffect(() => {
-        const fetch = async () => {
-            const results = await axios.get(`${process.env.REACT_APP_API}/posts/${username}`);
-            setPosts(results.data);
+        setIsCancelled(false);
+        if (!isCancelled){
+            const fetch = async () => {
+                const results = await axios.get(`${process.env.REACT_APP_API}/posts/${username}`);
+                setPosts(results.data);
+            }
+            fetch();
         }
-        fetch();
-    },[username, posts]);
+        return () => {
+            setIsCancelled(true);
+        }
+    },[username, posts, isCancelled]);
 
     useEffect(()=>{
-        const fetch = async () => {
-            const results = await axios.get(`https://avatars.dicebear.com/api/adventurer-neutral/${username}.svg`);
-            setAvatar(results.data);
+        setIsCancelled(false);
+        if(!isCancelled){
+            const fetch = async () => {
+                const results = await axios.get(`https://avatars.dicebear.com/api/adventurer-neutral/${username}.svg`);
+                setAvatar(results.data);
+            }
+            fetch();
         }
-        fetch();
-    },[username]);
+        return () => {
+            setIsCancelled(true);
+        }
+    },[username,isCancelled]);
 
     async function onSubmit(e){
         e.preventDefault();
-        const data = {
-            username: username,
-            content: postContent
+        if(!isCancelled){
+            const data = {
+                username: username,
+                content: postContent
+            }
+            if(postContent.length < 5){
+                return notifyError('post should be more that 5 characters long');
+            }
+            if(postContent.length > 1000){
+                return notifyError('post can\'t be more than a 1000 characters long')
+            }
+            try{
+                await axios.post(`${process.env.REACT_APP_API}/posts`,data);
+                setPostContent('')
+                notifySuccess('your post was uploaded successfully',)
+            }
+            catch(err){
+                setPostContent('')
+                notifyError('could not post , server error please try again later.')
+            }
         }
-        if(postContent.length < 5){
-            return notifyError('post should be more that 5 characters long');
-        }
-        if(postContent.length > 1000){
-            return notifyError('post can\'t be more than a 1000 characters long')
-        }
-        try{
-            await axios.post(`${process.env.REACT_APP_API}/posts`,data);
-            setPostContent('')
-            notifySuccess('your post was uploaded successfully',)
-        }
-        catch(err){
-            setPostContent('')
-            notifyError('could not post , server error please try again later.')
-        }
-
     }
 
     return (
@@ -88,7 +102,8 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
                                 poster={true}
                                 userId={userId}
                                 username={username}
-                                data={post} key={post._id}
+                                data={post} 
+                                key={post._id}
                                 notifySuccess={(msg)=>notifySuccess(msg)}
                                 notifyError={(msg)=>notifyError(msg)}
                             />

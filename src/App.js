@@ -7,6 +7,7 @@ import Main from './components/Main'
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Profile from './components/user/Profile';
 import SelectedProfile from './components/SelectedProfile';
+import AdminPage from './components/administration/AdminPage'
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   const notifySuccess = (msg) => toast.success(msg);
 
   const [loggedIn, setLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
  
@@ -31,22 +33,32 @@ function App() {
               notifyInfo={notifyInfo}
               userId={userId}
               username={username}
+              isAdmin={isAdmin}
               setLoggedIn={(value)=>setLoggedIn(value)}
             />
           </Route>
           <Route path='/profile'>
-            <Profile
-              username={username}
-              userId={userId}
-              notifySuccess={notifySuccess}
-              notifyError={notifyError}
-              notifyInfo={notifyInfo}
-            />
+            {isAdmin ? 
+              <AdminPage 
+                username={username}
+                notifySuccess={notifySuccess}
+                notifyError={notifyError}
+                notifyInfo={notifyInfo}
+              />
+              :
+              <Profile
+                username={username}
+                userId={userId}
+                notifySuccess={notifySuccess}
+                notifyError={notifyError}
+                notifyInfo={notifyInfo}
+              />
+            }
           </Route>
           <Route 
             path='/selecteduser/:username'   
             render={(props) => (
-              <SelectedProfile {...props} notifySuccess={notifySuccess} notifyError={notifyError} notifyInfo={notifyInfo} />
+              <SelectedProfile {...props} notifySuccess={notifySuccess} userId={userId} notifyError={notifyError} notifyInfo={notifyInfo} />
             )} 
           />
           <Redirect from='/' to='/posts' />
@@ -58,6 +70,7 @@ function App() {
           setLoggedIn={setLoggedIn} 
           setUserId={setUserId} 
           setUsername={setUsername}
+          setIsAdmin={setIsAdmin}
         />  
       }
     </div>

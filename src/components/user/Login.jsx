@@ -1,32 +1,43 @@
-import React,{ useState } from 'react';
+import React,{ useState, useEffect } from 'react';
 import Input from '../common/Input'
 import axios from 'axios';
 
-const Login = ({setUserId, setUsername, setLoggedIn, notifyError, notifySuccess, setPage}) => {
+const Login = ({setUserId, setIsAdmin, setUsername, setLoggedIn, notifyError, notifySuccess, setPage}) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isCancelled, setIsCancelled] = useState(true);
 
     async function onSubmit(e){
         e.preventDefault();
-        try{
-            const results = await axios(`${process.env.REACT_APP_API}/users/login?email=${email}&password=${password}`);
-            if(results.data.message === 'welcome'){
-                setUserId(results.data.userId);
-                setUsername(results.data.username);
-                notifySuccess('welcome')
-                setLoggedIn(true);
+        if(!isCancelled){
+            try{
+                const results = await axios(`${process.env.REACT_APP_API}/users/login?email=${email}&password=${password}`);
+                if(results.data.message === 'welcome'){
+                    setUserId(results.data.userId);
+                    setUsername(results.data.username);
+                    notifySuccess('welcome')
+                    setIsAdmin(results.data.isAdmin);
+                    setLoggedIn(true);
+                }
+                else{
+                    notifyError(results.data.message)
+                }
             }
-            else{
-                notifyError(results.data.message)
+            catch(err){
+                setPassword('')
+                notifyError('error in the server');
+                console.log(err);
             }
-        }
-        catch(err){
-            setPassword('')
-            notifyError('error in the server');
-            console.log(err);
         }
     }
+
+    useEffect(()=>{
+        setIsCancelled(false);
+        return () =>{
+            setIsCancelled(true);
+        }
+    },[isCancelled])
 
     return (
         <div className='container backdrop shadow'>
