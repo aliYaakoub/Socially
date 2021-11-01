@@ -9,21 +9,28 @@ const Posts = ({username, userId, notifySuccess, notifyError}) => {
     const [posts, setPosts] = useState([]);
     const [limit, setLimit] = useState(10);
     const [max, setMax] = useState(0);
+    const [isCancelled, setIsCancelled] = useState(true);
     const limitInc = 10;
 
     useEffect(() =>{
-        const fetch = async () =>{
-            try{
-                const results = await axios(`${process.env.REACT_APP_API}/posts?page=1&limit=${limit}`)
-                setPosts(results.data.filteredPosts);
-                setMax(results.data.max);
+        setIsCancelled(false);
+        if(!isCancelled){
+            const fetch = async () =>{
+                try{
+                    const results = await axios(`${process.env.REACT_APP_API}/posts?page=1&limit=${limit}`)
+                    setPosts(results.data.filteredPosts);
+                    setMax(results.data.max);
+                }
+                catch(err){
+                    console.error(err);
+                }
             }
-            catch(err){
-                console.error(err);
-            }
+            fetch();
         }
-        fetch();
-    })
+        return () => {
+            setIsCancelled(true);
+        }
+    },[limit, posts, isCancelled]);
 
     return (
         <div className="text-black posts flex flex-col mx-auto mt-10 mb-10">

@@ -17,11 +17,18 @@ const Post = ({username, data, userId, notifyError, notifySuccess, poster=false}
     const [numberOfComments, setNumberOfComments] = useState(comments.length);
     const [commentToUpload, setCommentToUpload] = useState('');
     const [deleteBtnBg, setDeleteBtnBg] = useState('bg-white');
+    const [isCancelled, setIsCancelled] = useState(true);
 
     async function onLiked(){
-        
-        await axios.patch(`${process.env.REACT_APP_API}/posts/onlike?liked=${liked}&postid=${data._id}&userid=${userId}`);
-        setLiked(!liked);
+        if(!isCancelled){
+            try{
+                await axios.patch(`${process.env.REACT_APP_API}/posts/onlike?postid=${data._id}&userid=${userId}`);
+                setLiked(!liked);
+            }
+            catch(err){
+                console.error(err);
+            }
+        }
     }
 
     async function onComment(){
@@ -36,130 +43,149 @@ const Post = ({username, data, userId, notifyError, notifySuccess, poster=false}
     }
 
     async function uploadComment(){
-        if(commentToUpload.length > 200){
-            notifyError('comment is too large to upload ...');
-        }
-        else{
-            try{
-                const result = await axios.post(`${process.env.REACT_APP_API}/posts/comment?postid=${data._id}&QueryUsername=${username}`,{ comment: commentToUpload});
-                if(result.data.message === 'success'){
-                    notifySuccess('comment uploaded .');
-                    setCommentToUpload('');
+        if(!isCancelled){
+            if(commentToUpload.length > 200){
+                notifyError('comment is too large to upload ...');
+            }
+            else{
+                try{
+                    const result = await axios.post(`${process.env.REACT_APP_API}/posts/comment?postid=${data._id}&QueryUsername=${username}`,{ comment: commentToUpload});
+                    if(result.data.message === 'success'){
+                        notifySuccess('comment uploaded .');
+                        setCommentToUpload('');
+                    }
+                    else {
+                        notifyError(result.data.message);
+                    }
                 }
-                else {
+                catch(err){
+                    notifyError('server error');
+                    console.error(err);
+                }
+            }
+            setNumberOfComments(numberOfComments+1);
+        }
+    }
+
+    useEffect(()=>{
+        setIsCancelled(false);
+        if(!isCancelled){
+            try{
+                setLikes(data.likes);
+                if(data.userWhoLikedThis.find(item => item === userId)){
+                    setLiked(true);
+                }
+            }
+            catch(err){
+                console.error(err);
+            }
+        }
+        return () => {
+            setIsCancelled(true);
+        }
+    },[setLikes,data,userId, isCancelled]);
+
+    useEffect(()=>{
+        setIsCancelled(false);
+        if(!isCancelled){
+            const fetchLikes = async () => {
+                try{
+                    const results = await axios.get(`${process.env.REACT_APP_API}/posts/getlikes?postid=${data._id}`)
+                    if(results.data.message === 'found'){
+                        setLikes(results.data.data.likes)
+                    }
+                }
+                catch(err){
+                    console.error(err);
+                }
+            }
+            fetchLikes();
+        }
+        return () => {
+            setIsCancelled(true);
+        }
+    },[data,liked, isCancelled])
+
+    useEffect(()=>{
+        setIsCancelled(false);
+        if(!isCancelled){
+            const fetchComments = async () => {
+                try{
+                    const results = await axios.get(`${process.env.REACT_APP_API}/posts/getcomments?postid=${data._id}`)
+                    if(results.data.message === "found"){
+                        setComments(results.data.data.comments);
+                    }
+                }
+                catch(err){
+                    console.error(err);
+                }
+            }
+            fetchComments();
+        }
+        return () => {
+            setIsCancelled(true);
+        }
+    },[data,isCancelled])
+
+    useEffect(()=>{
+        setIsCancelled(false);
+        if(!isCancelled){
+            const fetch = async () => {
+                const results = await axios.get(`https://avatars.dicebear.com/api/adventurer-neutral/${data.username}.svg`);
+                setAvatar(results.data);
+            }
+            fetch();
+        }
+        return () => {
+            setIsCancelled(true);
+        }
+    },[data, isCancelled]);
+
+    async function deletePost(){
+        if(!isCancelled){
+            try{
+                const result = await axios.delete(`${process.env.REACT_APP_API}/posts/${data._id}`);
+                if(result.data.message === 'success'){
+                    notifySuccess('post deleted successfully')
+                }
+                else{
                     notifyError(result.data.message);
                 }
             }
             catch(err){
-                notifyError('server error');
                 console.error(err);
+                notifyError('post already deleted');
             }
-        }
-        setNumberOfComments(numberOfComments+1);
-    }
-
-    useEffect(()=>{
-        setLikes(data.likes);
-        if(data.userWhoLikedThis.find(item => item === userId)){
-            setLiked(true);
-        }
-    },[data,userId]);
-
-    useEffect(()=>{
-        const fetchLikes = async () => {
-            try{
-                const results = await axios.get(`${process.env.REACT_APP_API}/posts/getlikes?postid=${data._id}`)
-                if(results.data.message === 'success'){
-                    setLikes(results.data.data.likes);
-                }
-                else{
-                    notifyError(results.data.message)
-                }
-            }
-            catch(err){
-                // if(!poster){
-                //     notifyError('post was deleted');
-                // }
-                console.error(err);
-            }
-        }
-        fetchLikes();
-    })
-
-    useEffect(()=>{
-        const fetchComments = async () => {
-            try{
-                const results = await axios.get(`${process.env.REACT_APP_API}/posts/getcomments?postid=${data._id}`)
-                if(results.data.message === 'success'){
-                    setComments(results.data.data.comments);
-                }
-                else{
-                    notifyError(results.data.message)
-                }
-            }
-            catch(err){
-                // notifyError('post was deleted');
-                console.error(err);
-            }
-        }
-        fetchComments();
-    })
-
-    useEffect(()=>{
-        const fetch = async () => {
-            const results = await axios.get(`https://avatars.dicebear.com/api/adventurer-neutral/${data.username}.svg`);
-            setAvatar(results.data);
-        }
-        fetch();
-    },[data]);
-
-    async function deletePost(){
-        try{
-            const result = await axios.delete(`${process.env.REACT_APP_API}/posts/${data._id}`);
-            if(result.data.message === 'success'){
-                notifySuccess('post deleted successfully')
-            }
-            else{
-                notifyError(result.data.message);
-            }
-        }
-        catch(err){
-            console.error(err);
-            notifyError('post already deleted');
         }
     }
 
     return (
         <div className='flex flex-col my-5'>
             <div className='relative post rounded-xl flex flex-col z-10 bg-white overflow-hidden shadow'>
-                <Link to={`/selecteduser/${data.username}`} className='p-5 mr-28'>
-                    <div className=' flex-row items-center pb-5 cursor-pointer inline-flex'>
+                <div  className='p-5 '>
+                    <Link to={`/selecteduser/${data.username}`} className=' flex-row items-center mb-5 cursor-pointer inline-flex'>
                         <div className=" border-2 border-blue-400 w-10 h-10 rounded-xl overflow-hidden bg-white">
                             <div dangerouslySetInnerHTML={{ __html: avatar }} />
                         </div>
                         <h1 className="text-2xl sm:text-3xl mx-3 text-blue-400">{data.username}</h1>
-                    </div>
+                    </Link>
                     <p className="text-xl text-justify">{data.content}</p>
-                </Link>
-                {/* <div className="absolute h-full right-0 w-16 sm:w-24 flex flex-col justify-center items-center mx-5 border-l-2 border-blue-300"> */}
+                </div>
                 <div className="absolute h-full right-0 w-16 sm:w-24 grid grid-cols-2 content-center items-center gap-2 pl-3 justify-items-center mx-5 border-l-2 border-blue-300">
-                    {/* <div className="flex flex-row items-center"> */}
                         <img src={liked ? fullHeart : emptyHeart} alt="" onClick={()=>onLiked()} className="cursor-pointer"/>
                         <p className="text-xl " >{likes}</p>
-                    {/* </div> */}
-                    {/* <div className="flex flex-row items-center"> */}
                         <FontAwesomeIcon icon={['far','comment']} onClick={()=>onComment()} size={window.innerWidth<640 ? '1x' : '2x'} className="cursor-pointer" />
                         <p className="text-xl " >{comments.length}</p>
-                    {/* </div> */}
                 </div>
             </div>
-            <div className={`w-full h-${commentsHeigth} transition-all bg-gray-300 overflow-hidden pt-3 flex flex-col shadow transform -translate-y-3 z-0 rounded-b-xl`}>
+            <div className={`w-full h-${commentsHeigth}  bg-gray-300 overflow-hidden pt-3 flex flex-col shadow transform -translate-y-3 z-0 rounded-b-xl`}>
                 {comments.length === 0 ? 
                     <h1 className='w-full text-center text-xl sm:text-2xl'>no comments yet</h1>
                     :
                     <div>
                         {comments.map(comment=>(
                             <Comment
+                                key={comment._id}
                                 comment={comment}
                             />
                         ))}
@@ -171,7 +197,7 @@ const Post = ({username, data, userId, notifyError, notifySuccess, poster=false}
                         name="comment" 
                         value={commentToUpload} 
                         onChange={(e)=>setCommentToUpload(e.target.value)}
-                        placeholder='type what feel ...'
+                        placeholder='type what you feel ...'
                         className="bg-black text-white w-full rounded-xl border-blue-400 px-5"
                     />
                     <button 
