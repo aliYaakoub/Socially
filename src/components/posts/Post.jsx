@@ -12,7 +12,7 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
     const [liked, setLiked] = useState(false);
     const [likes, setLikes] = useState(data.likes);
     const [avatar, setAvatar] = useState('');
-    const [commentsHeigth, setCommentsHeigth] = useState('0');
+    const [commentsHeigth, setCommentsHeigth] = useState('hidden');
     const [comments, setComments] = useState(data.comments);
     const [numberOfComments, setNumberOfComments] = useState(comments.length);
     const [commentToUpload, setCommentToUpload] = useState('');
@@ -32,12 +32,12 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
     }
 
     async function onComment(){
-        if(commentsHeigth === '0'){
-            setCommentsHeigth('auto');
+        if(commentsHeigth === 'hidden'){
+            setCommentsHeigth('flex');
             setDeleteBtnBg('bg-gray-300')
         }
         else{
-            setCommentsHeigth('0');
+            setCommentsHeigth('hidden');
             setDeleteBtnBg('bg-white')
         }
     }
@@ -178,7 +178,7 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
                         <p className="text-xl " >{comments.length}</p>
                 </div>
             </div>
-            <div className={`w-full h-${commentsHeigth}  bg-gray-300 overflow-hidden pt-3 flex flex-col shadow transform -translate-y-3 z-0 rounded-b-xl`}>
+            <div className={`w-full ${commentsHeigth}  bg-gray-300 overflow-hidden pt-3 flex-col shadow transform -translate-y-3 z-0 rounded-b-xl`}>
                 {comments.length === 0 ? 
                     <h1 className='w-full text-center text-xl sm:text-2xl'>no comments yet</h1>
                     :
