@@ -57,6 +57,12 @@ html{
   table-layout: auto;
   border-collapse: collapse;
 }
+.footer{
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%)
+}
 
 
 .container {
