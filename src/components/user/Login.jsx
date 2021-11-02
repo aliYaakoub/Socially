@@ -7,9 +7,11 @@ const Login = ({setUserId, setIsAdmin, setUsername, setLoggedIn, notifyError, no
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isCancelled, setIsCancelled] = useState(true);
+    const [isLoading, setIsLoading] = useState(false)
 
     async function onSubmit(e){
         e.preventDefault();
+        setIsLoading(true);
         if(!isCancelled){
             try{
                 const results = await axios(`${process.env.REACT_APP_API}/users/login?email=${email}&password=${password}`);
@@ -23,6 +25,7 @@ const Login = ({setUserId, setIsAdmin, setUsername, setLoggedIn, notifyError, no
                 else{
                     notifyError(results.data.message)
                 }
+                setIsLoading(false);
             }
             catch(err){
                 setPassword('')
@@ -40,8 +43,8 @@ const Login = ({setUserId, setIsAdmin, setUsername, setLoggedIn, notifyError, no
     },[isCancelled])
 
     return (
-        <div className='container backdrop shadow'>
-            <h1 className='text-2xl'>Please login</h1>
+        <div className='container relative backdrop shadow'>
+            {isLoading ? <h1 className='text-2xl'>Loading ...</h1> : <h1 className='text-2xl'>Please login</h1>}
             <form onSubmit={(e)=>onSubmit(e)}>
                 <Input 
                     label={email.length>0? '':'Email : '}

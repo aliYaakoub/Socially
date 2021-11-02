@@ -197,7 +197,7 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
                         name="comment" 
                         value={commentToUpload} 
                         onChange={(e)=>setCommentToUpload(e.target.value)}
-                        placeholder='type what you feel ...'
+                        placeholder='type your comment here  ...'
                         className="bg-black text-white w-full rounded-xl border-blue-400 px-5"
                     />
                     <button 
