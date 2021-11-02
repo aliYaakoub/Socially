@@ -19,6 +19,9 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
     const [deleteBtnBg, setDeleteBtnBg] = useState('bg-white');
     const [isCancelled, setIsCancelled] = useState(true);
     const [likeLoading, setLikeLoading] = useState(false);
+    const [isPosting, setIsPosting] = useState(false);
+    const [date] = useState(data.date.slice(0,10));
+    const [time] = useState(data.date.slice(11,16));
 
     async function onLiked(){
         if(!isCancelled){
@@ -168,19 +171,29 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
         <div className='flex flex-col my-5'>
             <div className='relative post rounded-xl flex flex-col sm:flex-row justify-between z-10 bg-white overflow-hidden shadow'>
                 <div  className='p-5 border-b sm:border-none border-blue-400 w-full'>
-                    <Link to={`/selecteduser/${data.username}`} className=' flex-row items-center mb-5 cursor-pointer inline-flex'>
+                    <Link to={`/selecteduser/${data.username}`} className=' flex-row w-full pr-28 items-center mb-5 cursor-pointer inline-flex'>
                         <div className=" border-2 border-blue-400 w-10 h-10 rounded-xl overflow-hidden bg-white">
                             <div dangerouslySetInnerHTML={{ __html: avatar }} />
                         </div>
-                        <h1 className="text-2xl sm:text-3xl mx-3 text-blue-400">{data.username}</h1>
+                        <div className='flex flex-col justify-center mx-3 text-blue-400'>
+                            <h1 className="text-2xl sm:text-3xl">{data.username}</h1>
+                        </div>
                     </Link>
                     <p className="text-xl text-justify sm:pr-28">{data.content}</p>
                 </div>
-                <div className="sm:absolute sm:right-0 h-full w-24 sm:grid flex flex-row sm:grid-cols-2 content-center items-center gap-2 pl-3 justify-items-center mx-5 sm:border-l-2 border-blue-300">
-                        <img src={liked ? fullHeart : emptyHeart} alt="" onClick={()=>onLiked()} className="cursor-pointer"/>
-                        <p className="text-xl " >{likes}</p>
-                        <FontAwesomeIcon icon={['far','comment']} onClick={()=>onComment()} size='2x' className="cursor-pointer sm:ml-0 ml-16" />
-                        <p className="text-xl " >{comments.length}</p>
+                <div className="sm:absolute sm:right-0 h-full sm:w-24 sm:flex-col flex flex-row  justify-around sm:grid-cols-1 w-full content-center items-center gap-2 pl-3 mx-5 sm:border-l-2 border-blue-300">
+                        <div className="flex flex-row sm:grid mt-auto sm:grid-cols-2 justify-items-center content-center items-center gap-2 w-full">
+                            <img src={liked ? fullHeart : emptyHeart} alt="" onClick={()=>onLiked()} className="cursor-pointer"/>
+                            <p className="text-xl " >{likes}</p>
+                        </div>
+                        <div className="flex flex-row sm:grid sm:grid-cols-2 justify-items-center content-center items-center gap-2 w-full">
+                            <FontAwesomeIcon icon={['far','comment']} onClick={()=>onComment()} size='2x' className="cursor-pointer " />
+                            <p className="text-xl " >{comments.length}</p>
+                        </div>
+                        <div className="flex flex-col date sm:mt-auto sm:mb-3">
+                            <p className='w-32 sm:w-full'>{date}</p>
+                            {/* <p className='w-full'>{time}</p> */}
+                        </div>
                 </div>
             </div>
             <div className={`w-full ${commentsHeigth}  bg-gray-300 overflow-hidden pt-3 flex-col shadow transform -translate-y-3 z-0 rounded-b-xl`}>

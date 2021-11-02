@@ -11,6 +11,7 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
     const [avatar, setAvatar] = useState('');
     const [isCancelled, setIsCancelled] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
+    const [isPosting, setIsPosting] = useState(false);
 
     useEffect(() => {
         setIsCancelled(false);
@@ -43,6 +44,7 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
 
     async function onSubmit(e){
         e.preventDefault();
+        setIsPosting(true);
         if(!isCancelled){
             const data = {
                 username: username,
@@ -64,6 +66,7 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
                 notifyError('could not post , server error please try again later.')
             }
         }
+        setIsPosting(false);
     }
 
     return (
@@ -93,7 +96,7 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
                                     onChange={(e)=>setPostContent(e.target.value)}
                                     className=' resize-none w-full h-full rounded p-5 textarea'
                                 />
-                                <button className='bg-gray-400 h-16 rounded btn-active text-white w-2/4 mx-auto text-2xl mt-5 '>Post</button>
+                                <button disabled={isPosting ? true : false} className='bg-gray-400 h-16 rounded btn-active text-white w-2/4 mx-auto text-2xl mt-5 '>Post</button>
                             </form>
                         </div>
                         <div className="absolute bottom-2 animation">
