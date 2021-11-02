@@ -166,20 +166,20 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
 
     return (
         <div className='flex flex-col my-5'>
-            <div className='relative post rounded-xl flex flex-col z-10 bg-white overflow-hidden shadow'>
-                <div  className='p-5 '>
+            <div className='relative post rounded-xl flex flex-col sm:flex-row justify-between z-10 bg-white overflow-hidden shadow'>
+                <div  className='p-5 border-b sm:border-none border-blue-400 w-full'>
                     <Link to={`/selecteduser/${data.username}`} className=' flex-row items-center mb-5 cursor-pointer inline-flex'>
                         <div className=" border-2 border-blue-400 w-10 h-10 rounded-xl overflow-hidden bg-white">
                             <div dangerouslySetInnerHTML={{ __html: avatar }} />
                         </div>
                         <h1 className="text-2xl sm:text-3xl mx-3 text-blue-400">{data.username}</h1>
                     </Link>
-                    <p className="text-xl text-justify">{data.content}</p>
+                    <p className="text-xl text-justify sm:pr-28">{data.content}</p>
                 </div>
-                <div className="absolute h-full right-0 w-16 sm:w-24 grid grid-cols-2 content-center items-center gap-2 pl-3 justify-items-center mx-5 border-l-2 border-blue-300">
+                <div className="sm:absolute sm:right-0 h-full w-24 sm:grid flex flex-row sm:grid-cols-2 content-center items-center gap-2 pl-3 justify-items-center mx-5 sm:border-l-2 border-blue-300">
                         <img src={liked ? fullHeart : emptyHeart} alt="" onClick={()=>onLiked()} className="cursor-pointer"/>
                         <p className="text-xl " >{likes}</p>
-                        <FontAwesomeIcon icon={['far','comment']} onClick={()=>onComment()} size={window.innerWidth<640 ? '1x' : '2x'} className="cursor-pointer" />
+                        <FontAwesomeIcon icon={['far','comment']} onClick={()=>onComment()} size='2x' className="cursor-pointer sm:ml-0 ml-16" />
                         <p className="text-xl " >{comments.length}</p>
                 </div>
             </div>
