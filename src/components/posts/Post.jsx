@@ -18,12 +18,17 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
     const [commentToUpload, setCommentToUpload] = useState('');
     const [deleteBtnBg, setDeleteBtnBg] = useState('bg-white');
     const [isCancelled, setIsCancelled] = useState(true);
+    const [likeLoading, setLikeLoading] = useState(false);
 
     async function onLiked(){
         if(!isCancelled){
             try{
-                await axios.patch(`${process.env.REACT_APP_API}/posts/onlike?postid=${data._id}&userid=${userId}`);
-                setLiked(!liked);
+                if(!likeLoading){
+                    setLikeLoading(true);
+                    await axios.patch(`${process.env.REACT_APP_API}/posts/onlike?postid=${data._id}&userid=${userId}`);
+                    setLiked(!liked);
+                    setLikeLoading(false);
+                }
             }
             catch(err){
                 console.error(err);
