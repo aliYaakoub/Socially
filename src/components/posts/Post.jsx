@@ -21,7 +21,6 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
     const [likeLoading, setLikeLoading] = useState(false);
     const [isPosting, setIsPosting] = useState(false);
     const [date] = useState(data.date.slice(0,10));
-    const [time] = useState(data.date.slice(11,16));
 
     async function onLiked(){
         if(!isCancelled){
@@ -51,6 +50,7 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
     }
 
     async function uploadComment(){
+        setIsPosting(true);
         if(!isCancelled){
             if(commentToUpload.length > 200){
                 notifyError('comment is too large to upload ...');
@@ -65,6 +65,7 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
                     else {
                         notifyError(result.data.message);
                     }
+                    setIsPosting(false);
                 }
                 catch(err){
                     notifyError('server error');
@@ -221,6 +222,7 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
                     <button 
                         onClick={()=>uploadComment()}
                         className="px-5 py-2 bg-blue-400 rounded-xl ml-3"
+                        disabled={isPosting ? true : false}
                     >
                         Submit
                     </button>
