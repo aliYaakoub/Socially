@@ -13,15 +13,17 @@ const Posts = ({isAdmin, username, userId, notifySuccess, notifyError}) => {
     const [isCancelled, setIsCancelled] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const limitInc = 10;
+    // const [page, setPage]= useState(1);
+    const filtered = posts.slice(0 , 1 * limit);
 
     useEffect(() =>{
         setIsCancelled(false);
         if(!isCancelled){
             const fetch = async () =>{
                 try{
-                    const results = await axios(`${process.env.REACT_APP_API}/posts?page=1&limit=${limit}`)
-                    setPosts(results.data.filteredPosts);
-                    setMax(results.data.max);
+                    const results = await axios(`${process.env.REACT_APP_API}/posts`)
+                    setPosts(results.data);
+                    setMax(posts.length);
                     setIsLoading(false)
                 }
                 catch(err){
@@ -48,7 +50,7 @@ const Posts = ({isAdmin, username, userId, notifySuccess, notifyError}) => {
                         :
                         <div>
                             <h1 className='text-center text-2xl'>users posts</h1>
-                            {posts.map(post => (
+                            {filtered.map(post => (
                                 <Post
                                     data={post}
                                     key={post._id}
@@ -61,7 +63,7 @@ const Posts = ({isAdmin, username, userId, notifySuccess, notifyError}) => {
                             ))}
                         </div>
                     }
-                    {posts.length === max ?
+                    {filtered.length === max ?
                         null
                     :
                         <FontAwesomeIcon icon={['far','plus-square']} size="4x" className="mx-auto text-blue-400 my-10 cursor-pointer" onClick={()=>setLimit(limit+limitInc)}/>
