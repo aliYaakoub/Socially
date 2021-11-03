@@ -73,6 +73,7 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
                 catch(err){
                     notifyError('server error');
                     console.error(err);
+                    setIsPosting(false);
                 }
             }
             setNumberOfComments(numberOfComments+1);

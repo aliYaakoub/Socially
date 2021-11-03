@@ -28,6 +28,7 @@ const Posts = ({isAdmin, username, userId, notifySuccess, notifyError}) => {
                 }
                 catch(err){
                     console.error(err);
+                    setIsLoading(false)
                 }
             }
             fetch();
