@@ -21,6 +21,7 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
     const [likeLoading, setLikeLoading] = useState(false);
     const [isPosting, setIsPosting] = useState(false);
     const [date] = useState(data.date.slice(0,10));
+    const [isDeleting, setIsDeleting] = useState(false);
 
     async function onLiked(){
         if(!isCancelled){
@@ -51,9 +52,11 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
 
     async function uploadComment(){
         setIsPosting(true);
+        
         if(!isCancelled){
             if(commentToUpload.length > 200){
                 notifyError('comment is too large to upload ...');
+                setIsPosting(false);
             }
             else{
                 try{
@@ -152,18 +155,22 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
 
     async function deletePost(){
         if(!isCancelled){
+            setIsDeleting(true);
             try{
                 const result = await axios.delete(`${process.env.REACT_APP_API}/posts/${data._id}`);
                 if(result.data.message === 'success'){
                     notifySuccess('post deleted successfully')
+                    setIsDeleting(false);
                 }
                 else{
                     notifyError(result.data.message);
+                    setIsDeleting(false);
                 }
             }
             catch(err){
                 console.error(err);
                 notifyError('post already deleted');
+                setIsDeleting(false);
             }
         }
     }
@@ -208,6 +215,11 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
                                 comment={comment}
                             />
                         ))}
+                        {isPosting ? 
+                            <p className='text-center text-2xl'>Loading ...</p>
+                            :
+                            null
+                        }
                     </div>
                 }
                 <div className='w-full flex flex-row p-2'>
@@ -233,7 +245,7 @@ const Post = ({username, isAdmin, data, userId, notifyError, notifySuccess, post
                     onClick={()=>deletePost()}
                     className={`text-red-600 z-10 ${deleteBtnBg} w-32 rounded-b-xl pb-2 mx-auto hover:scale-105 transition-transform transform -translate-y-3`}
                 >
-                    Delete This Post
+                    {isDeleting ? 'deleting ...': 'Delete This Post'}
                 </button>
                 :
                 null

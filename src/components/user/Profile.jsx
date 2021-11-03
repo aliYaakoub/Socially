@@ -98,7 +98,13 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
                                     onChange={(e)=>setPostContent(e.target.value)}
                                     className=' resize-none w-full h-full rounded p-5 textarea'
                                 />
-                                <button disabled={isPosting ? true : false} className='bg-gray-400 h-16 rounded btn-active text-white w-2/4 mx-auto text-2xl mt-5 '>Post</button>
+                                {isPosting ? 
+                                    <div className='text-center h-16 w-full flex items-center text-2xl m-2 justify-center'>
+                                        <p>Loading ...</p>
+                                    </div>
+                                    :
+                                    <button disabled={isPosting ? true : false} className='bg-gray-400 h-16 rounded btn-active text-white w-2/4 mx-auto text-2xl mt-5 '>Post</button>
+                                }
                             </form>
                         </div>
                         <div className="absolute bottom-2 animation">
