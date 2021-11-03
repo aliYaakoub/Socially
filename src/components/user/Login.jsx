@@ -46,7 +46,7 @@ const Login = ({setUserId, setIsAdmin, setUsername, setLoggedIn, notifyError, no
 
     return (
         <div>
-            <div className='container relative backdrop shadow'>
+            <div className='container relative shadow'>
                 {isLoading ? <h1 className='text-2xl'>Loading ...</h1> : <h1 className='text-2xl'>Please login</h1>}
                 <form onSubmit={(e)=>onSubmit(e)}>
                     <Input 
@@ -73,9 +73,9 @@ const Login = ({setUserId, setIsAdmin, setUsername, setLoggedIn, notifyError, no
                 <p className="text">Don't have an account? <span onClick={()=>setPage('register')}>Register</span> </p>
                 </form>
             </div>
-            <div className="footer flex flex-row ">
-                <div className="w-full mb-2 text-white text-center flex flex-row items-center">
-                    <FontAwesomeIcon icon={['fas','code']} />
+            <div className="sm:absolute bottom-10 transform justify-around flex flex-row w-full footer ">
+                <div className="text-white text-center flex flex-row items-center">
+                    <FontAwesomeIcon icon={['fas','code']} size='1x' />
                     <p className="ml-3 font-bold">By Ali Yaakoub</p>
                 </div>
                 <a href="https://github.com/aliYaakoub/Socially" target='_blank' rel="noreferrer"className="text-white flex flex-row items-center">

@@ -58,15 +58,14 @@ html{
   border-collapse: collapse;
 }
 .footer{
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%)
+  margin: 2rem 2rem 0;
+  width: 400px;
 }
 
 .container {
   background-color: rgba(0, 0, 0, 0.4);
   padding: 20px 40px;
+  margin: 0 2rem;
   border-radius: 5px;
   color: #fff;
   width: 400px;

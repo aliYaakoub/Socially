@@ -51,10 +51,12 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
                 content: postContent
             }
             if(postContent.length < 5){
+                setIsPosting(false);
                 return notifyError('post should be more that 5 characters long');
             }
             if(postContent.length > 1000){
-                return notifyError('post can\'t be more than a 1000 characters long')
+                setIsPosting(false);
+                return notifyError('post can\'t be more than a 1000 characters long');
             }
             try{
                 await axios.post(`${process.env.REACT_APP_API}/posts`,data);
