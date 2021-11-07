@@ -96,7 +96,7 @@ const Profile = ({username, userId, notifyError, notifySuccess}) => {
                                     id="content"
                                     value={postContent}
                                     onChange={(e)=>setPostContent(e.target.value)}
-                                    className=' resize-none w-full h-full rounded p-5 textarea'
+                                    className=' resize-none w-full h-full rounded p-5 textarea whitespace-pre-wrap'
                                 />
                                 {isPosting ? 
                                     <div className='text-center h-16 w-full flex items-center text-2xl m-2 justify-center'>
