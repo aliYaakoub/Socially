@@ -2,19 +2,22 @@ import React, { useState, useEffect }from 'react'
 import axios from 'axios'
 import Post from './Post';
 import Loading from '../common/Loading'
+import lodash from 'lodash'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../fontAwsome'
 
 const Posts = ({isAdmin, username, userId, notifySuccess, notifyError}) => {
 
     const [posts, setPosts] = useState([]);
+    const [sorted, setSorted] = useState([]);
+    const [sortBy, setSortBy] = useState('date');
+    const [order, setOrder] = useState('asc')
     const [limit, setLimit] = useState(10);
     const [max, setMax] = useState(0);
     const [isCancelled, setIsCancelled] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const limitInc = 10;
-    // const [page, setPage]= useState(1);
-    const filtered = posts.slice(0 , 1 * limit);
+    const filtered = sorted.slice(0 , 1 * limit);
 
     useEffect(() =>{
         setIsCancelled(false);
@@ -36,7 +39,25 @@ const Posts = ({isAdmin, username, userId, notifySuccess, notifyError}) => {
         return () => {
             setIsCancelled(true);
         }
-    },[limit, posts, isCancelled]);
+    },[limit, posts, isCancelled, order, sortBy]);
+
+    useEffect(()=>{
+        if(!isCancelled){
+            setSorted(lodash.orderBy(posts, [sortBy], [order]))
+        }
+    },[sortBy, order, isCancelled, posts])
+
+    function setDateSorting() {
+        setSortBy('date');
+        if(order === 'desc') setOrder('asc');
+        else if (order === 'asc') setOrder('desc');
+    }
+
+    function setLikesSorting() {
+        setSortBy('likes');
+        if(order === 'desc') setOrder('asc');
+        else if (order === 'asc') setOrder('desc');
+    }
 
     return (
         <div>
@@ -50,7 +71,14 @@ const Posts = ({isAdmin, username, userId, notifySuccess, notifyError}) => {
                         <h1 className='text-center text-2xl pt-20'>no posts to show</h1>
                         :
                         <div>
-                            <h1 className='text-center text-2xl'>users posts</h1>
+                            <div className='flex flex-row items-center justify-between md:px-10'>
+                                <h1 className='text-center md:text-2xl'>users posts</h1>
+                                <div className='flex flex-row float-right'>
+                                    <p className='px-2 md:text-xl cursor-pointer'>sort By : </p>
+                                    <p className='px-2 md:text-xl cursor-pointer' onClick={()=>setDateSorting()} >date {sortBy==='date' && <FontAwesomeIcon icon={order === 'asc' ? ['fas', 'sort-up']: ['fas','sort-down']}/>}</p>
+                                    <p className='px-2 md:text-xl cursor-pointer' onClick={()=>setLikesSorting()} >likes {sortBy==='likes' && <FontAwesomeIcon icon={order === 'asc' ? ['fas', 'sort-up']: ['fas','sort-down']}/>}</p>
+                                </div>
+                            </div>
                             {filtered.map(post => (
                                 <Post
                                     data={post}
